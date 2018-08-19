@@ -1,0 +1,29 @@
+<menu "菜单">
+<sponsorship "赞助 COSCUP">
+<mailtoSponsor """
+  如果您欲赞助 COSCUP，请与
+  <a href="mailto:sponsorship@coscup.org">sponsorship@coscup.org</a>
+  联系。
+""">
+<countdownWarning "* 开始注册时间以 KKTIX 网站为准">
+<registrationStarted "报名已经开始">
+<registrationEnd "票亭已被推倒(笑)">
+<countdown "倒数">
+<contactUs "联系我们">
+<diamond "钻石级赞助">
+<gold "黄金级赞助">
+<silver "白银级赞助">
+<bronze "青铜级赞助">
+<cohost "协办单位">
+<media "媒体伙伴">
+<special "特别感谢">
+<personal "个人赞助">
+<specialThanks "请点选看看有那些支持 COSCUP 的伙伴们!">
+<register "COSCUP 报名就在今天！">
+<donateDesc """
+  谢谢所有参与 COSCUP 2014 个人赞助方案的赞助者，因为有你们，促成了活动的举行，感谢各位! 
+  以下赞助者名字依赞助款金额与姓名笔划顺序排列：
+""">
+<donateAnonymous """
+  及不具名的好朋友 {{ $anonymousDonors }} 名
+""">

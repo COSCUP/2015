@@ -1,0 +1,130 @@
+/*
+ * Fill up sponsor information on sidebar or mobile view
+ */
+
+define(function(require) {
+
+  'use strict';
+
+  var $ = require('jquery');
+  var context = require('context');
+
+  var api_url = context.origin + context.api_path + '/sponsors/?callback=?';
+  var sponsorLevels = ['diamond', 'gold', 'silver', 'bronze', 'cohost', 'media'];
+  var donorLevels = ['donors'];
+
+  var showed = 0;
+
+  function getData(callback) {
+    $.getJSON(api_url, function(data) {
+        // FIXME make sure it won't have event racing
+        document.l10n.ready(function() {
+          if (showed == 0) {
+            callback(data);
+            showed++;
+          }
+        });
+      }
+    );
+  }
+
+  function desktopSponsorList(data) {
+    var $sponsors = $('#sponsor').empty().removeClass('empty');
+
+    // Save existing nodes
+    var $existingSponsors = $sponsors.children();
+    $sponsors.empty();
+
+    $.each(sponsorLevels, function (i, level) {
+        if (!data['sponsors'][level]) {
+          return;
+        }
+        var $h2 = $('<h2 data-l10n-id="' + level + '" />');
+        $h2.text(document.l10n.getSync(level));
+        $sponsors.append($h2);
+        var $u = $('<ul class="' + level + ' no-decoration" />');
+        $.each(data['sponsors'][level], function (i, sponsor) {
+          // Assume that there is no special chars to escape
+          $u.append(
+            '<li><a href="' + sponsor.url + '" target="_blank">'
+            + '<img title="' + sponsor.name[context.lang] + '" src="' + context.origin + sponsor.logoUrl + '" />'
+            + '</a></li>'
+          );
+        });
+        $sponsors.append($u);
+      }
+    );
+    (function addDonors () {
+        if (!data['donors']) {
+          return;
+        }
+        var $h2 = $('<h2 data-l10n-id="personal" />');
+        $h2.text(document.l10n.getSync('personal'));
+        $sponsors.append($h2);
+        var $desc = $('<p data-l10n-id="donateDesc"/>')
+        $desc.text(document.l10n.getSync('donateDesc'));
+        $sponsors.append($desc);
+        var $u = $('<ul class="personal no-decoration">');
+        $.each(data['donors'], function (i, donors) {
+          $u.append('<li>' + donors + '</li>');
+        });
+        $u.append('</ul>');
+        $sponsors.append($u);
+    })();
+    if (data['sponsors']['special']) {
+        var $h2 = $('<h2 data-l10n-id="special" />');
+        $h2.text(document.l10n.getSync('special'));
+        var $u = $('<ul class="no-decoration" />');
+        var text = document.l10n.getSync('specialThanks');
+        var url = context.origin + '/2015/' + context.lang + '/sponsors/#special';
+        var $a = $('<li><a href="' + url + '" data-l10n-id="specialThanks">' + text + '</a></li>');
+        $u.append($a);
+        $sponsors.append($h2);
+        $sponsors.append($u);
+    }
+    // Restore existing sponsors
+    $sponsors.append($existingSponsors);
+  }
+
+  function mobileSponsorList(data) {
+    var $allSponsors = [];
+    $.each(sponsorLevels, function (i, level) {
+        if (!data['sponsors'][level]) return;
+        $.each(
+          data['sponsors'][level],
+          function (i, sponsor) {
+            $allSponsors.push(sponsor);
+          }
+        );
+      }
+    );
+    var $wrap = $('<div class="swipe-wrap" />');
+    for (var j = 0; j < $allSponsors.length; j += 2) {
+      var sponsor1 = $allSponsors[j];
+      var sponsor2 = $allSponsors[j+1];
+      if (!sponsor2) {
+        sponsor2 = { url: '#', name: { 'zh-tw': '' }, logoUrl: '' };
+      }
+      $wrap.append(
+        '<div><span>'
+          + '<a href="' + sponsor1.url + '" target="_blank" title="' + sponsor1.name[context.lang] + '">'
+          + '<img alt="' + sponsor1.name[context.lang] + '" src="' + context.origin + sponsor1.logoUrl + '"/></a>'
+          + '<a href="' + sponsor2.url + '" target="_blank" title="' + sponsor2.name[context.lang] + '">'
+          + '<img alt="' + sponsor2.name[context.lang] + '" src="' + context.origin + sponsor2.logoUrl + '"/></a>'
+          + '</span></div>');
+    }
+    $('#mySwipe').empty().removeClass('empty').append($wrap);
+    require(['lib/swipe'], function(Swipe) {
+      Swipe(document.getElementById('mySwipe'), {
+        auto: 3000
+      });
+    });
+  }
+
+  // init: Load sponsors from API if it's empty,
+  var id = context.mobile? '#mySwipe' : '#sponsor';
+  var callback = context.mobile? mobileSponsorList : desktopSponsorList;
+  if ($(id + '.empty').length) {
+    getData(callback);
+  }
+});

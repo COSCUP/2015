@@ -1,0 +1,36 @@
+CACHE MANIFEST
+
+# MARKSITE APPCACHE 50639033dd9387952bbbe9f26d8d1f53
+CACHE:
+
+# STATIC CONTENTS
+index.php
+api/index.php
+api/sponsors/index.php
+api/program/index.php
+api/news/index.php
+api/menu/index.php
+zh-tw/about/images/a01.jpg
+zh-tw/about/images/a02.jpg
+en/about/images/a01.jpg
+en/about/images/a02.jpg
+zh-cn/about/images/a01.jpg
+zh-cn/about/images/a02.jpg
+
+# PARSED CONTENTS
+./zh-tw/
+./zh-tw/program/
+./zh-tw/about/
+./zh-tw/sponsors/
+./zh-tw/api/
+./en/
+./en/about/
+./en/program/
+./en/live.html
+./en/venue.html
+./en/sponsors/
+./en/news.html
+./en/contact.html
+./en/api/
+
+# THEME 8fc663015921cffc1181b308146076e995608a79
