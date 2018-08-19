@@ -9,7 +9,7 @@ define(function(require) {
   var $ = require('jquery');
   var context = require('context');
 
-  var api_url = context.origin + context.api_path + '/sponsors/?callback=?';
+  var api_url = context.origin + context.api_path + '/sponsors.json';
   var sponsorLevels = ['diamond', 'gold', 'silver', 'bronze', 'cohost', 'media'];
   var donorLevels = ['donors'];
 

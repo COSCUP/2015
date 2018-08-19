@@ -18,7 +18,7 @@ define(['jquery'], function($) {
   })
 
   return {
-    origin: 'http://coscup.org',
+    origin: '',
     api_path: '/2015/api',
     lang: lang,
     mobile: isMobile
